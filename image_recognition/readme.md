@@ -1,1 +1,1 @@
-## Trash Scout: Image Recognition
+# Trash Scout: Image Recognition
