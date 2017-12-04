@@ -1,1 +1,1 @@
-## Trash Scout
+# Trash Scout
