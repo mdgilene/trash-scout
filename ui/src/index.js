@@ -1,3 +1,6 @@
+// Electron remote
+import { remote } from 'electron';
+
 // React
 import React from 'react';
 import { render } from 'react-dom';
@@ -15,8 +18,12 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { App } from './components/App';
 
-// Global Photon Styles
-import './photon/dist/css/photon.css';
+const window = remote.getCurrentWindow().webContents;
+window.$ = window.jQuery = require('jquery');
+
+// Global Bootstrap Styles
+import './bootstrap/css/bootstrap.css';
+import './bootstrap/js/bootstrap';
 
 const reducers = {};
 
