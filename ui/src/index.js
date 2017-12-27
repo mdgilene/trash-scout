@@ -18,10 +18,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { App } from './components/App';
 
-const window = remote.getCurrentWindow().webContents;
-window.$ = window.jQuery = require('jquery');
-
-// Global Bootstrap Styles
+// Global Bootstrap Styles and JS
 import './bootstrap/css/bootstrap.css';
 import './bootstrap/js/bootstrap';
 
