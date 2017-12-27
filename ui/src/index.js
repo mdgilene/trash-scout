@@ -20,6 +20,7 @@ import { App } from './components/App';
 
 // Global Bootstrap Styles and JS
 import './bootstrap/css/bootstrap.css';
+import './bootstrap/css/bootstrap-theme.css';
 import './bootstrap/js/bootstrap';
 
 const reducers = {};
