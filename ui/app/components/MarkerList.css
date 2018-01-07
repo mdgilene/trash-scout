@@ -1,0 +1,23 @@
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+li {
+  padding: 5px;
+  border-bottom: 1px solid black;
+  user-select: none;
+  cursor: pointer;
+}
+li:hover {
+  background: lightgrey;
+}
+li:last-child {
+  border-bottom: 0;
+}
+li.selected {
+  background: lightgrey;
+}
+li > a {
+  color: black;
+}

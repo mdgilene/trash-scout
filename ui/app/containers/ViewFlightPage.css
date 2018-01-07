@@ -1,0 +1,41 @@
+.main {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  width: 100%;
+  margin: auto;
+}
+
+.sidebar {
+  height: 100%;
+  width: 15%;
+  overflow-y: auto;
+}
+
+.sidebar-large {
+  composes: sidebar;
+  width: 30%;
+}
+
+.loadingElement {
+  height: 100%;
+}
+
+.mapContainer {
+  padding: 5px;
+  height: 450px;
+}
+
+.mapElement {
+  height: 100%;
+}
