@@ -36,11 +36,6 @@ function newFlight(name) {
   log('New flight', name, 'created with id:', insertedFlight.$loki);
 }
 
-function clear() {
-  const flights = db.getCollection('flights');
-  flights.clear();
-}
-
 function getFlights() {
   const flights = db.getCollection('flights');
   return flights
@@ -49,15 +44,56 @@ function getFlights() {
     .data();
 }
 
-function addMarker(name, marker) {
+function getFlight(name) {
+  const flights = db.getCollection('flights');
+  return flights
+    .chain()
+    .find({ name })
+    .data();
+}
+
+function updateFlight(flight) {
+  const flights = db.getCollection('flights');
+  flights.update(flight);
+
+  log('Flight', flight.$loki, 'updated');
+}
+
+function addMarkers(name, markers) {
   const flights = db.getCollection('flights');
   const flight = flights.by('name', name);
-  flight.markers.push(marker);
+
+  let added = 0;
+  markers.forEach(marker => {
+    // No duplicate markers, if you want to update a marker then use a different API call
+    if (!flight.markers.map(marker => marker.id).includes(marker.id)) {
+      flight.markers.push(marker);
+      added = added + 1;
+    }
+  });
+
   flights.update(flight);
+
+  log(added, 'markers added to flight', name);
+}
+
+function clear() {
+  const flights = db.getCollection('flights');
+  flights.clear();
+
+  log('Flights cleared');
 }
 
 function log(...msg) {
   console.log('[DATABASE]:', ...msg);
 }
 
-module.exports = { createDatabase, newFlight, clear, getFlights, addMarker };
+module.exports = {
+  createDatabase,
+  newFlight,
+  getFlights,
+  getFlight,
+  updateFlight,
+  addMarkers,
+  clear,
+};
