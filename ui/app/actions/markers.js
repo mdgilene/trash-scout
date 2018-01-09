@@ -1,24 +1,44 @@
+import axios from 'axios';
+
 export const LOAD_MARKERS = 'LOAD_MARKERS';
 export const CLEAR_MARKERS = 'CLEAR_MARKER';
 
-export function loadMarkers() {
+let markerid = 0;
+
+function loadMarkersAction(markers) {
   return {
     type: LOAD_MARKERS,
-    payload: generateRandomMarkers(10)
+    markers
+  };
+}
+
+function clearMarkersAction() {
+  return {
+    type: CLEAR_MARKERS,
+    markers: []
+  };
+}
+
+export function loadMarkersFromDatabase(flightName) {
+  return (dispatch) => {
+    axios.get('http://localhost:3000/flights', { params: { name: flightName } })
+      .then(res => dispatch(loadMarkersAction(res.data.markers)))
+      .catch(console.log);
   };
 }
 
 export function clearMarkers() {
-  return {
-    type: CLEAR_MARKERS
+  return (dispatch) => {
+    axios.delete('http://localhost:3000/flights')
+      .then(() => dispatch(clearMarkersAction()))
+      .catch(console.log);
   };
 }
 
-function generateRandomMarkers(count) {
-  const results = [];
-  for (let i = 0; i < count; i += 1) {
-    results.push({ lat: Math.random() * 180 - 90, lng: Math.random() * 360 - 180 });
-  }
-  results.push({ lat: -90, lng: 0 });
-  return results;
+export function addMarker() {
+  return (dispatch) => {
+    axios.post('http://localhost:3000/flights/Flight-0/markers', [{ lat: 0, lng: 0, id: markerid++}])
+      .then(() => dispatch(loadMarkersFromDatabase('Flight-0')))
+      .catch(console.log);
+  };
 }

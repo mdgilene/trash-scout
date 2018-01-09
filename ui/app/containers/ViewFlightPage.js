@@ -1,24 +1,38 @@
+// @flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import MapComponent from '../components/MapComponent';
 import MarkerList from '../components/MarkerList';
 import styles from './ViewFlightPage.css';
 
 import * as MarkersActions from '../actions/markers';
 
-class ViewFlightpage extends Component {
+type Props = {
+  markers: [],
+  loadMarkersFromDatabase: (name: string) => void,
+  clearMarkers: () => void,
+  addMarker: () => void
+};
+
+class ViewFlightpage extends Component<Props> {
+  props: Props;
+
   render() {
-    const { markers, loadMarkers, clearMarkers } = this.props;
+    const {
+      markers,
+      loadMarkersFromDatabase,
+      clearMarkers,
+      addMarker
+    } = this.props;
 
     return (
       <div className={styles.main}>
         <div className={styles.sidebar}>
           <MarkerList markers={markers} />
-          <button onClick={loadMarkers}>Load Markers</button>
-          <button onClick={clearMarkers}>Clear Markers</button>
+          <button onClick={addMarker}>Add Marker</button>
+          <button onClick={() => loadMarkersFromDatabase('Flight-0')}>Load Markers</button>
+          <button onClick={() => clearMarkers()}>Clear Markers</button>
         </div>
         <div className={styles.content}>
           <MapComponent
@@ -34,16 +48,6 @@ class ViewFlightpage extends Component {
     );
   }
 }
-
-// Prop Validation
-ViewFlightpage.propTypes = {
-  markers: PropTypes.arrayOf(PropTypes.shape({
-    lat: PropTypes.number,
-    lng: PropTypes.number
-  })).isRequired,
-  loadMarkers: PropTypes.func.isRequired,
-  clearMarkers: PropTypes.func.isRequired
-};
 
 // Connect to state
 function mapStateToProps(state) {

@@ -5,7 +5,7 @@ const initialState = [];
 export default function markers(state = initialState, action) {
   switch (action.type) {
     case LOAD_MARKERS:
-      return action.payload;
+      return action.markers;
     case CLEAR_MARKERS:
       return [];
     default:
