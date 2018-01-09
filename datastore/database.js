@@ -49,7 +49,7 @@ function getFlight(name) {
   return flights
     .chain()
     .find({ name })
-    .data();
+    .data()[0];
 }
 
 function updateFlight(flight) {

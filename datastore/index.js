@@ -12,12 +12,11 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.get('/flights', (req, res) => {
-  res.json(Database.getFlights());
-});
-
-app.get('/flights/:name', (req, res) => {
-  const name = req.params.name;
-  res.json(Database.getFlight(name));
+  if (req.query.name) {
+    res.json(Database.getFlight(req.query.name));
+  } else {
+    res.json(Database.getFlights());    
+  }
 });
 
 app.post('/flights', (req, res) => {
@@ -42,6 +41,9 @@ app.delete('/flights', (req, res) => {
 
 Database.createDatabase(() => {
   console.log('Initilize http server now...');
+
+  Database.clear();
+  Database.newFlight('Flight-0');
 
   app.listen(3000, () =>
     console.log('Server listening for HTTP requests on port 3000'),
