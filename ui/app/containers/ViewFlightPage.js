@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import MapComponent from '../components/MapComponent';
 import MarkerList from '../components/MarkerList';
@@ -11,7 +12,6 @@ import * as MarkersActions from '../actions/markers';
 type Props = {
   markers: [],
   loadMarkersFromDatabase: (name: string) => void,
-  clearMarkers: () => void,
   addMarker: () => void
 };
 
@@ -22,7 +22,6 @@ class ViewFlightpage extends Component<Props> {
     const {
       markers,
       loadMarkersFromDatabase,
-      clearMarkers,
       addMarker
     } = this.props;
 
@@ -30,9 +29,6 @@ class ViewFlightpage extends Component<Props> {
       <div className={styles.main}>
         <div className={styles.sidebar}>
           <MarkerList markers={markers} />
-          <button onClick={addMarker}>Add Marker</button>
-          <button onClick={() => loadMarkersFromDatabase('Flight-0')}>Load Markers</button>
-          <button onClick={() => clearMarkers()}>Clear Markers</button>
         </div>
         <div className={styles.content}>
           <MapComponent
@@ -44,6 +40,11 @@ class ViewFlightpage extends Component<Props> {
           />
         </div>
         <div className={styles['sidebar-large']} />
+        <div>
+          <button onClick={addMarker}>Add Marker</button>
+          <button onClick={() => loadMarkersFromDatabase('Flight-0')}>Load Markers</button>
+          <Link to="/">Home</Link>
+        </div>
       </div>
     );
   }
