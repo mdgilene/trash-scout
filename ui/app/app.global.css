@@ -41,6 +41,7 @@ a:hover {
 }
 
 #root,
-#app {
+#app,
+#app > div {
   height: 100%;
 }
