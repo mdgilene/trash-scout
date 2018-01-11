@@ -12,25 +12,10 @@ function loadMarkersAction(markers) {
   };
 }
 
-function clearMarkersAction() {
-  return {
-    type: CLEAR_MARKERS,
-    markers: []
-  };
-}
-
 export function loadMarkersFromDatabase(flightName) {
   return (dispatch) => {
     axios.get('http://localhost:3000/flights', { params: { name: flightName } })
       .then(res => dispatch(loadMarkersAction(res.data.markers)))
-      .catch(console.log);
-  };
-}
-
-export function clearMarkers() {
-  return (dispatch) => {
-    axios.delete('http://localhost:3000/flights')
-      .then(() => dispatch(clearMarkersAction()))
       .catch(console.log);
   };
 }
