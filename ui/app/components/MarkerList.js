@@ -17,7 +17,7 @@ class MarkerList extends Component<Props> {
 
   render() {
     return (
-      <ul>
+      <ul className={styles.markerList}>
         {this.props.markers.map((marker, index) => (
           <li
             key={index}

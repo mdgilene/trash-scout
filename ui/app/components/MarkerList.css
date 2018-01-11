@@ -1,23 +1,28 @@
-ul {
+ul.markerList {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-li {
+
+ul.markerList > li {
   padding: 5px;
   border-bottom: 1px solid black;
   user-select: none;
   cursor: pointer;
 }
-li:hover {
+
+ul.markerList > li:hover {
   background: lightgrey;
 }
-li:last-child {
+
+ul.markerList > li:last-child {
   border-bottom: 0;
 }
-li.selected {
+
+ul.markerList > li.selected {
   background: lightgrey;
 }
-li > a {
+
+ul.markerList > li > a {
   color: black;
 }
