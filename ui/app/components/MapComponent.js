@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import { GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs } from 'react-google-maps';
 
+type Props = {
+  markers: []
+};
+
 // Component logic and rendering
-class MapComponent extends Component {
+class MapComponent extends Component<Props> {
+  props: Props;
+
   render() {
     const { markers } = this.props;
 
@@ -22,14 +27,6 @@ class MapComponent extends Component {
     );
   }
 }
-
-// PropType validation
-MapComponent.propTypes = {
-  markers: PropTypes.arrayOf(PropTypes.shape({
-    lat: PropTypes.number,
-    lng: PropTypes.number
-  })).isRequired
-};
 
 // Export
 export default withScriptjs(withGoogleMap(MapComponent));
