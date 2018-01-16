@@ -10,7 +10,9 @@
     "node": true
   },
   "rules": {
-    "arrow-parens": ["off"],
+    "arrow-parens": [
+      "off"
+    ],
     "compat/compat": "error",
     "consistent-return": "off",
     "comma-dangle": "off",
@@ -24,19 +26,40 @@
     "promise/always-return": "error",
     "promise/catch-or-return": "error",
     "promise/no-native": "off",
+    "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "react/sort-comp": [
       "error",
       {
-        "order": ["type-annotations", "static-methods", "lifecycle", "everything-else", "render"]
+        "order": [
+          "type-annotations",
+          "static-methods",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
       }
     ],
     "react/jsx-no-bind": "off",
-    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
     "react/prefer-stateless-function": "off"
   },
-  "plugins": ["flowtype", "import", "promise", "compat", "react"],
+  "plugins": [
+    "flowtype",
+    "import",
+    "promise",
+    "compat",
+    "react"
+  ],
   "settings": {
     "import/resolver": {
       "webpack": {
