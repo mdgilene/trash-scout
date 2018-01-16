@@ -1,13 +1,15 @@
-import { OPEN_FLIGHT } from '../actions/app';
+import { LOAD_FLIGHT, UNLOAD_FLIGHT } from '../actions/app';
 
 const initialState = {
-  openFlight: ''
+  loadedFlight: {}
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case OPEN_FLIGHT:
-      return { ...state, openFlight: action.name };
+    case LOAD_FLIGHT:
+      return { ...state, loadedFlight: action.flight };
+    case UNLOAD_FLIGHT:
+      return { ...state, loadedFlight: {} };
     default:
       return state;
   }

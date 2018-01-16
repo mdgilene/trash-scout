@@ -26,10 +26,7 @@ export function loadFlights() {
   return (dispatch) => {
     axios.get('http://localhost:3000/flights')
       .then(res => dispatch(loadFlightsAction(res.data)))
-      .catch(err => {
-        console.log(err);
-        return [];
-      });
+      .catch(console.log);
   };
 }
 

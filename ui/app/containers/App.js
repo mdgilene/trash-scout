@@ -20,13 +20,14 @@ class App extends React.Component<Props> {
 
   render() {
     const { app, classes } = this.props;
+
     return (
       <div id="app">
         <Reboot />
         <AppBar position="static">
           <Toolbar>
             <Typography type="title" className={classes.flexitem}>Trash Scout</Typography>
-            {app.openFlight && <Typography type="title">{app.openFlight}</Typography>}
+            {app.loadedFlight && <Typography type="title">{app.loadedFlight.name}</Typography>}
           </Toolbar>
         </AppBar>
         {this.props.children}

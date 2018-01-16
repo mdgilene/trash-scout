@@ -31,7 +31,7 @@ function newFlight(params) {
     markers: [],
   };
 
-  const insertedFlight = flights.insert(flight);
+  flights.insert(flight);
 
   log('New flight created', flight);
 }

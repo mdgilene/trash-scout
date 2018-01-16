@@ -14,7 +14,7 @@ type Props = {
   flights: [],
   classes: {},
   loadFlights: () => void,
-  openFlight: (name: string) => void
+  unloadLoadedFlight: () => void
 };
 
 const styles = theme => ({
@@ -34,11 +34,11 @@ class HomePage extends Component<Props> {
 
   componentWillMount() {
     this.props.loadFlights();
-    this.props.openFlight('');
+    this.props.unloadLoadedFlight();
   }
 
   render() {
-    const { flights, classes, openFlight } = this.props;
+    const { flights, classes } = this.props;
 
     return (
       <div className={classes.root}>
@@ -61,7 +61,6 @@ class HomePage extends Component<Props> {
                     key={flight.name}
                     component={Link}
                     to={`/view/${flight.name}`}
-                    onClick={() => openFlight(flight.name)}
                   >
                     <Typography>{flight.name}</Typography>
                   </ListItem>

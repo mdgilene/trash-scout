@@ -1,23 +1,21 @@
 const Database = require('./database');
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log(req.method, req.url, req.ip);
-  next();
-});
+app.use(morgan('tiny'));
 
 app.use(bodyParser.json());
 
-app.get('/flights', (req, res) => {
-  if (req.query.name) {
-    res.json(Database.getFlight(req.query.name));
-  } else {
-    res.json(Database.getFlights());
-  }
+app.get('/flights/:name/', (req, res) => {
+  res.json(Database.getFlight(req.params.name));
 });
+
+app.get('/flights', (req, res) => {
+  res.json(Database.getFlights());
+})
 
 app.post('/flights', (req, res) => {
   Database.newFlight(req.body);

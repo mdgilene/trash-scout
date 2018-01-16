@@ -12,7 +12,7 @@ export default () => (
     <div>
       <Route exact path="/" component={HomePage} />
       <Route path="/newflight" component={NewFlightPage} />
-      <Route path="/view" component={ViewFlightPage} />
+      <Route path="/view/:name" component={ViewFlightPage} />
     </div>
   </App>
 );
