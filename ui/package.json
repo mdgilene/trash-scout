@@ -194,6 +194,8 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
+    "material-ui": "^1.0.0-beta.28",
+    "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-google-maps": "^9.4.5",
@@ -204,7 +206,8 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "source-map-support": "^0.5.0"
+    "source-map-support": "^0.5.0",
+    "typeface-roboto": "^0.0.50"
   },
   "devEngines": {
     "node": ">=7.x",

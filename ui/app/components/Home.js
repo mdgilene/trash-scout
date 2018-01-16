@@ -1,65 +1,58 @@
 // @flow
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import styles from './Home.css';
+import { push } from 'react-router-redux';
+import { Grid, Paper } from 'material-ui';
+import List from 'material-ui/List/List';
+import ListItem from 'material-ui/List/ListItem';
+import Button from 'material-ui/Button/Button';
+import withStyles from 'material-ui/styles/withStyles';
+import Typography from 'material-ui/Typography/Typography';
 
-type Props = {
-  flights: [],
-  loadFlights: () => void,
-  newFlight: (name: string) => void
-};
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    margin: 30
+  },
+  paper: {
+    padding: 16,
+    textAlign: 'center',
+    color: theme.palette.text.secondary
+  }
+});
 
-export default class Home extends Component<Props> {
+class Home extends Component<Props> {
   props: Props;
 
-  constructor() {
-    super();
-    this.state = {
-      newFlightName: ''
-    };
-
-    this.onFieldChange = this.onFieldChange.bind(this);
-  }
-
-  componentWillMount() {
-    this.props.loadFlights();
-  }
-
-  onFieldChange(event) {
-    this.setState({ newFlightName: event.target.value });
-  }
-
   render() {
-    const { newFlightName } = this.state;
-    const { newFlight, flights } = this.props;
+    const { classes } = this.props;
 
     return (
-      <div>
-        <div className={styles.header}>
-          <h2>Trash Scout</h2>
-          <Link to="/view">Go to /view </Link>
-        </div>
-        <div className={styles.main}>
-          <div className={styles.col}>
-            <h2>Open Existing Flight</h2>
-            <ul>
-              {flights.map(flight => (
-                <li key={flight.$loki}>{flight.name}</li>
-              ))}
-            </ul>
-          </div>
-          <div className={styles.col}>
-            <form onSubmit={() => newFlight(newFlightName)}>
-              <h2>New Flight</h2>
-              <label htmlFor="flightName">
-                Flight Name
-                <input id="flightName" type="text" value={newFlightName} onChange={this.onFieldChange} />
-              </label>
-              <button type="submit">Create</button>
-            </form>
-          </div>
-        </div>
+      <div className={classes.root}>
+        <Grid container>
+          <Grid item xs>
+            <Paper className={classes.paper}>
+              <Typography type="headline">Open an Existing Flight</Typography>{' '}
+              <Typography type="headline">Or</Typography>
+              <Button raised color="primary">
+                Create a new Flight
+              </Button>
+              <List>
+                <ListItem button>
+                  <Typography>Flight 1</Typography>
+                </ListItem>
+                <ListItem button>
+                  <Typography>Flight 1</Typography>
+                </ListItem>
+                <ListItem button>
+                  <Typography>Flight 1</Typography>
+                </ListItem>
+              </List>
+            </Paper>
+          </Grid>
+        </Grid>
       </div>
     );
   }
 }
+
+export default withStyles(styles)(Home);

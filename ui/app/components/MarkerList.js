@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './MarkerList.css';
+import { List, ListItem } from 'material-ui/List';
 
 type Props = {
   markers: []
@@ -17,19 +17,18 @@ class MarkerList extends Component<Props> {
 
   render() {
     return (
-      <ul className={styles.markerList}>
+      <List>
         {this.props.markers.map((marker, index) => (
-          <li
+          <ListItem
             key={index}
-            className={this.state.selected === index ? styles.selected : null}
             onClick={() => {
               this.setState({ selected: index });
             }}
           >
             lat: {marker.lat} lng: {marker.lng}
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     );
   }
 }

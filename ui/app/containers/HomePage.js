@@ -12,9 +12,7 @@ class HomePage extends Component<Props> {
   props: Props;
 
   render() {
-    return (
-      <Home />
-    );
+    return <Home />;
   }
 }
 
@@ -28,4 +26,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(FlightsActions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
