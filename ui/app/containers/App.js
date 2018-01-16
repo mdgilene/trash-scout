@@ -1,25 +1,32 @@
 // @flow
 import * as React from 'react';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar/Toolbar';
-import Typography from 'material-ui/Typography/Typography';
-import withTheme from 'material-ui/styles/withTheme';
-import Reboot from 'material-ui/Reboot/Reboot';
+import { connect } from 'react-redux';
+import { withStyles, AppBar, Toolbar, Typography, Reboot } from 'material-ui';
 
 type Props = {
-  children: React.Node
+  children: React.Node,
+  app: {},
+  classes: {}
 };
+
+const styles = () => ({
+  flexitem: {
+    flex: 1
+  }
+});
 
 class App extends React.Component<Props> {
   props: Props;
 
   render() {
+    const { app, classes } = this.props;
     return (
       <div id="app">
         <Reboot />
         <AppBar position="static">
           <Toolbar>
-            <Typography type="title">Trash Scout</Typography>
+            <Typography type="title" className={classes.flexitem}>Trash Scout</Typography>
+            {app.openFlight && <Typography type="title">{app.openFlight}</Typography>}
           </Toolbar>
         </AppBar>
         {this.props.children}
@@ -28,4 +35,10 @@ class App extends React.Component<Props> {
   }
 }
 
-export default withTheme()(App);
+function mapStateToProps(state) {
+  return {
+    app: state.app
+  };
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(App));

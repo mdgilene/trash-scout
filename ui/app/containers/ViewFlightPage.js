@@ -3,43 +3,46 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import MapComponent from '../components/MapComponent';
-import MarkerList from '../components/MarkerList';
+import { withStyles, Button } from 'material-ui';
 
 import * as MarkersActions from '../actions/markers';
 
 type Props = {
-  markers: [],
-  loadMarkersFromDatabase: (name: string) => void,
-  addMarker: () => void
+  classes: {}
 };
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    margin: 30
+  },
+  paper: {
+    padding: 16,
+    textAlign: 'center',
+    color: theme.palette.text.secondary
+  },
+  button: {
+    margin: 8
+  }
+});
 
 class ViewFlightpage extends Component<Props> {
   props: Props;
 
   render() {
-    const { markers, loadMarkersFromDatabase, addMarker } = this.props;
+    const { classes } = this.props;
 
     return (
       <div>
-        <div>
-          <MarkerList markers={markers} />
-        </div>
-        <div>
-          <MapComponent
-            markers={markers}
-            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-            loadingElement={<div />}
-            containerElement={<div />}
-            mapElement={<div />}
-          />
-        </div>
-        <div />
-        <div>
-          <button onClick={addMarker}>Add Marker</button>
-          <button onClick={() => loadMarkersFromDatabase('Flight-0')}>Load Markers</button>
-          <Link to="/">Home</Link>
-        </div>
+        <Button
+          raised
+          color="primary"
+          className={classes.button}
+          component={Link}
+          to="/"
+        >
+          Back
+        </Button>
       </div>
     );
   }
@@ -58,4 +61,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 // Export
-export default connect(mapStateToProps, mapDispatchToProps)(ViewFlightpage);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ViewFlightpage));
