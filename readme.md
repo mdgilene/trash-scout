@@ -15,3 +15,7 @@ Python code that analyzes images and determines if they contain trash or not.
 ## UI
 
 Electron+React user interface for viewing photos and trash locations.
+
+### VSCode Settings Sync Gist ID
+
+5a512e3ac21b94663b6d9233f6901546
