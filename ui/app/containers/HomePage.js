@@ -7,11 +7,14 @@ import { Link } from 'react-router-dom';
 import { Grid, Paper, List, ListItem, Typography, withStyles } from 'material-ui';
 import Button from 'material-ui/Button';
 
+import * as AppActions from '../actions/app';
 import * as FlightsActions from '../actions/flights';
 
 type Props = {
   flights: [],
-  classes: {}
+  classes: {},
+  loadFlights: () => void,
+  openFlight: (name: string) => void
 };
 
 const styles = theme => ({
@@ -29,27 +32,37 @@ const styles = theme => ({
 class HomePage extends Component<Props> {
   props: Props;
 
+  componentWillMount() {
+    this.props.loadFlights();
+    this.props.openFlight('');
+  }
+
   render() {
-    const { flights, classes } = this.props;
+    const { flights, classes, openFlight } = this.props;
 
     return (
       <div className={classes.root}>
         <Grid container>
           <Grid item xs>
             <Paper className={classes.paper}>
-              <Typography type="headline">Open an Existing Flight</Typography>
-              <Typography type="headline">Or</Typography>
+              <Typography type="headline">Open an Existing Flight<br />Or</Typography>
               <Button
                 raised
                 color="primary"
                 component={Link}
-                to="newflight"
+                to="/newflight"
               >
                 Create a new Flight
               </Button>
               <List>
                 {flights.map(flight => (
-                  <ListItem button>
+                  <ListItem
+                    button
+                    key={flight.name}
+                    component={Link}
+                    to={`/view/${flight.name}`}
+                    onClick={() => openFlight(flight.name)}
+                  >
                     <Typography>{flight.name}</Typography>
                   </ListItem>
                 ))}
@@ -69,7 +82,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(FlightsActions, dispatch);
+  return bindActionCreators({ ...AppActions, ...FlightsActions }, dispatch);
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(HomePage));
