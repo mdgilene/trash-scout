@@ -15,12 +15,12 @@ app.get('/flights', (req, res) => {
   if (req.query.name) {
     res.json(Database.getFlight(req.query.name));
   } else {
-    res.json(Database.getFlights());    
+    res.json(Database.getFlights());
   }
 });
 
 app.post('/flights', (req, res) => {
-  Database.newFlight(req.body.name);
+  Database.newFlight(req.body);
   res.status(200).send();
 });
 
@@ -43,7 +43,7 @@ Database.createDatabase(() => {
   console.log('Initilize http server now...');
 
   Database.clear();
-  Database.newFlight('Flight-0');
+  Database.newFlight({ name: 'TestFlight', imageDensity: 16 });
 
   app.listen(3000, () =>
     console.log('Server listening for HTTP requests on port 3000'),

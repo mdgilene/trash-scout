@@ -23,17 +23,17 @@ function databaseInitialize(callback) {
   callback();
 }
 
-function newFlight(name) {
+function newFlight(params) {
   const flights = db.getCollection('flights');
 
   const flight = {
-    name,
+    ...params,
     markers: [],
   };
 
   const insertedFlight = flights.insert(flight);
 
-  log('New flight', name, 'created with id:', insertedFlight.$loki);
+  log('New flight created', flight);
 }
 
 function getFlights() {
