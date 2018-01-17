@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { withStyles, Button, Grid, List, ListItem, Typography } from 'material-ui';
+import { withStyles, Grid, List, ListItem, Typography, Paper } from 'material-ui';
+
 import MapComponent from '../components/MapComponent';
 
+import getDeviceLocation from '../utils/geolocation';
 import * as AppActions from '../actions/app';
 
 type Props = {
@@ -17,24 +19,39 @@ type Props = {
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+    flex: 1,
     margin: 10
   },
-  paper: {
+  paperList: {
     padding: 16,
+    height: 500,
+    color: theme.palette.text.secondary,
+    overflow: 'auto'
+  },
+  paperText: {
+    padding: 16,
+    height: 500,
+    color: theme.palette.text.secondary,
+    display: 'flex',
+    flexDirection: 'column',
     textAlign: 'center',
-    color: theme.palette.text.secondary
-  },
-  button: {
-    margin: 8
-  },
-  flex: {
-    flex: 1
+    justifyContent: 'center'
   }
 });
 
 class ViewFlightpage extends Component<Props> {
   props: Props;
+
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  componentWillMount() {
+    getDeviceLocation()
+      .then(loc => this.setState({ deviceLocation: loc }))
+      .catch(console.log);
+  }
 
   componentDidMount() {
     this.props.loadFlight(this.props.match.params.name);
@@ -44,37 +61,40 @@ class ViewFlightpage extends Component<Props> {
     const { classes } = this.props;
     const { loadedFlight } = this.props.app;
 
-    console.log(loadedFlight);
-
     return (
       <div className={classes.root}>
         <Grid container>
-          <Grid item xs={2}>
-            <List>
-              {loadedFlight.markers && loadedFlight.markers.map(marker => (
-                <ListItem><Typography>{marker.lat} , {marker.lng}</Typography></ListItem>
-              ))}
-            </List>
+          <Grid item xs={4}>
+            {loadedFlight.markers && loadedFlight.markers.length > 0 ? (
+              <Paper className={classes.paperList}>
+                <List>
+                  {loadedFlight.markers.map((marker, index) => (
+                    <ListItem key={index}>
+                      <Typography>
+                        ({index}) -- lat: {marker.lat} , lng: {marker.lng}
+                      </Typography>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            ) : (
+              <Paper className={classes.paperText}>
+                <Typography className={classes.markersText}>No Markers</Typography>
+              </Paper>
+            )}
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={8}>
             <MapComponent
-              markers={[]}
-              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+              center={this.state.deviceLocation || { lat: 0, lng: 0 }}
+              zoom={15}
+              markers={loadedFlight.markers || []}
+              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
               loadingElement={<div style={{ height: '100%' }} />}
               containerElement={<div style={{ height: '100%' }} />}
               mapElement={<div style={{ height: '500px' }} />}
             />
           </Grid>
         </Grid>
-        <Button
-          raised
-          color="primary"
-          className={classes.button}
-          component={Link}
-          to="/"
-        >
-          Back
-        </Button>
       </div>
     );
   }

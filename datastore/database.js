@@ -33,7 +33,7 @@ function newFlight(params) {
 
   flights.insert(flight);
 
-  log('New flight created', flight);
+  log('New flight created', flight.name);
 }
 
 function getFlights() {
@@ -66,7 +66,7 @@ function addMarkers(name, markers) {
   let added = 0;
   markers.forEach(marker => {
     // No duplicate markers, if you want to update a marker then use a different API call
-    if (!flight.markers.map(marker => marker.id).includes(marker.id)) {
+    if (!flight.markers.includes(marker)) {
       flight.markers.push(marker);
       added = added + 1;
     }

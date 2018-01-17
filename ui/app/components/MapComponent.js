@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
-import { GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 
 type Props = {
-  markers: []
+  markers: [],
+  center: {},
+  zoom: number
 };
 
 // Component logic and rendering
@@ -11,10 +13,10 @@ class MapComponent extends Component<Props> {
   props: Props;
 
   render() {
-    const { markers } = this.props;
+    const { markers, center, zoom } = this.props;
 
     return (
-      <GoogleMap defaultZoom={3} center={{ lat: 0, lng: 0 }}>
+      <GoogleMap defaultZoom={zoom || 4} center={center}>
         {markers.map((marker, index) => (
           <Marker
             position={{ lat: marker.lat, lng: marker.lng }}
@@ -22,7 +24,6 @@ class MapComponent extends Component<Props> {
             onClick={() => console.log(marker.lat, marker.lng)}
           />
         ))}
-        <Polyline path={markers} geodesic />
       </GoogleMap>
     );
   }

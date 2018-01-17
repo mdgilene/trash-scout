@@ -13,6 +13,8 @@
 import { app, BrowserWindow } from 'electron';
 import MenuBuilder from './menu';
 
+// process.env.GOOGLE_API_KEY = 'AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8';
+
 let mainWindow = null;
 
 if (process.env.NODE_ENV === 'production') {
