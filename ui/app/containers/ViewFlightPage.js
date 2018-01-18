@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withStyles, Grid, List, ListItem, Typography, Paper } from 'material-ui';
+import axios from 'axios';
 
 import MapComponent from '../components/MapComponent';
 
@@ -36,6 +37,11 @@ const styles = theme => ({
     flexDirection: 'column',
     textAlign: 'center',
     justifyContent: 'center'
+  },
+  paperData: {
+    padding: 16,
+    margin: '8px 0 8px 0',
+    color: theme.palette.text.secondary
   }
 });
 
@@ -45,6 +51,8 @@ class ViewFlightpage extends Component<Props> {
   constructor() {
     super();
     this.state = {};
+
+    this.selectMarker = this.selectMarker.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +63,10 @@ class ViewFlightpage extends Component<Props> {
 
   componentDidMount() {
     this.props.loadFlight(this.props.match.params.name);
+  }
+
+  selectMarker(marker) {
+    this.setState({selectedMarker: marker});
   }
 
   render() {
@@ -69,7 +81,7 @@ class ViewFlightpage extends Component<Props> {
               <Paper className={classes.paperList}>
                 <List>
                   {loadedFlight.markers.map((marker, index) => (
-                    <ListItem key={index}>
+                    <ListItem button key={index} onClick={() => this.selectMarker(marker)}>
                       <Typography>
                         ({index}) -- lat: {marker.lat} , lng: {marker.lng}
                       </Typography>
@@ -95,6 +107,16 @@ class ViewFlightpage extends Component<Props> {
             />
           </Grid>
         </Grid>
+        { this.state.selectedMarker &&
+          <Paper className={classes.paperData}>
+            <Grid container>
+                <Grid item xs={4}>
+                  <img src={`http://localhost:3000/resources/${this.props.app.loadedFlight.name}/${this.state.selectedMarker.image}`} />
+                </Grid>
+                <Grid item xs={8}/>
+            </Grid>
+          </Paper>
+        }
       </div>
     );
   }

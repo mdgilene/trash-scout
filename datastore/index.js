@@ -9,6 +9,8 @@ app.use(morgan('tiny'));
 
 app.use(bodyParser.json());
 
+app.use('/resources', express.static('resources'));
+
 app.get('/flights/:name/', (req, res) => {
   res.json(Database.getFlight(req.params.name));
 });
@@ -46,83 +48,38 @@ Database.createDatabase(() => {
     {
       lat: 39.393674,
       lng: -84.449653,
+      image: '1.jpg'
     },
     {
       lat: 39.392126,
       lng: -84.446967,
+      image: '2.jpg'
     },
     {
       lat: 39.39439,
       lng: -84.447439,
+      image: '1.jpg'
     },
     {
       lat: 39.393246,
       lng: -84.442461,
+      image: '2.jpg'
     },
     {
       lat: 39.392591,
       lng: -84.447418,
+      image: '1.jpg'
     },
     {
       lat: 39.393674,
       lng: -84.449653,
+      image: '2.jpg'
     },
     {
       lat: 39.392126,
       lng: -84.446967,
-    },
-    {
-      lat: 39.39439,
-      lng: -84.447439,
-    },
-    {
-      lat: 39.393246,
-      lng: -84.442461,
-    },
-    {
-      lat: 39.392591,
-      lng: -84.447418,
-    },
-    {
-      lat: 39.393674,
-      lng: -84.449653,
-    },
-    {
-      lat: 39.392126,
-      lng: -84.446967,
-    },
-    {
-      lat: 39.39439,
-      lng: -84.447439,
-    },
-    {
-      lat: 39.393246,
-      lng: -84.442461,
-    },
-    {
-      lat: 39.392591,
-      lng: -84.447418,
-    },
-    {
-      lat: 39.393674,
-      lng: -84.449653,
-    },
-    {
-      lat: 39.392126,
-      lng: -84.446967,
-    },
-    {
-      lat: 39.39439,
-      lng: -84.447439,
-    },
-    {
-      lat: 39.393246,
-      lng: -84.442461,
-    },
-    {
-      lat: 39.392591,
-      lng: -84.447418,
-    },
+      image: '1.jpg'
+    }
   ]);
 
   app.listen(3000, () =>

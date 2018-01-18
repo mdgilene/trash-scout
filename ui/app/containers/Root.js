@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 // Material-UI Theme
 import { MuiThemeProvider, createMuiTheme, withTheme } from 'material-ui/styles';
+import { blue } from 'material-ui/colors'
 
 import Routes from '../routes';
 
@@ -15,7 +16,10 @@ type RootType = {
 
 const theme = createMuiTheme({
   palette: {
-    type: 'dark' // Switching the dark mode on is a single property value change.
+    primary: {
+      main: blue[500],
+    },
+    type: 'dark'
   }
 });
 
