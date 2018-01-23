@@ -1,10 +1,8 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { withStyles, Grid, List, ListItem, Typography, Paper } from 'material-ui';
-import axios from 'axios';
+import { withStyles, Grid, List, ListItem, Typography, Paper, Button } from 'material-ui';
 
 import MapComponent from '../components/MapComponent';
 
@@ -12,10 +10,17 @@ import getDeviceLocation from '../utils/geolocation';
 import * as AppActions from '../actions/app';
 
 type Props = {
-  app: { loadedFlight: {} },
+  app: {
+    loadedFlight: {}
+  },
   classes: {},
-  match: { params: { name: string } },
-  loadFlight: (name: string) => void
+  match: {
+    params: {
+      name: string
+    }
+  },
+  loadFlight: (name: string) => void,
+  setDeviceLocation: (deviceLocation: {}) => void
 };
 
 const styles = theme => ({
@@ -25,13 +30,13 @@ const styles = theme => ({
   },
   paperList: {
     padding: 16,
-    height: 500,
+    height: 580,
     color: theme.palette.text.secondary,
     overflow: 'auto'
   },
   paperText: {
     padding: 16,
-    height: 500,
+    height: 580,
     color: theme.palette.text.secondary,
     display: 'flex',
     flexDirection: 'column',
@@ -40,8 +45,9 @@ const styles = theme => ({
   },
   paperData: {
     padding: 16,
-    margin: '8px 0 8px 0',
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    height: 580,
+    overflow: 'auto'
   }
 });
 
@@ -57,7 +63,7 @@ class ViewFlightpage extends Component<Props> {
 
   componentWillMount() {
     getDeviceLocation()
-      .then(loc => this.setState({ deviceLocation: loc }))
+      .then(loc => this.props.setDeviceLocation(loc))
       .catch(console.log);
   }
 
@@ -66,24 +72,26 @@ class ViewFlightpage extends Component<Props> {
   }
 
   selectMarker(marker) {
-    this.setState({selectedMarker: marker});
+    this.setState({ selectedMarker: marker });
   }
 
   render() {
     const { classes } = this.props;
-    const { loadedFlight } = this.props.app;
+    const { loadedFlight, deviceLocation } = this.props.app;
+    const { selectedMarker } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             {loadedFlight.markers && loadedFlight.markers.length > 0 ? (
               <Paper className={classes.paperList}>
                 <List>
                   {loadedFlight.markers.map((marker, index) => (
                     <ListItem button key={index} onClick={() => this.selectMarker(marker)}>
                       <Typography>
-                        ({index}) -- lat: {marker.lat} , lng: {marker.lng}
+                        (lat: {marker.lat}
+                        , lng: {marker.lng}
                       </Typography>
                     </ListItem>
                   ))}
@@ -95,28 +103,68 @@ class ViewFlightpage extends Component<Props> {
               </Paper>
             )}
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <MapComponent
-              center={this.state.deviceLocation || { lat: 0, lng: 0 }}
+              center={
+                deviceLocation || {
+                  lat: 0,
+                  lng: 0
+                }
+              }
               zoom={15}
               markers={loadedFlight.markers || []}
               googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
-              loadingElement={<div style={{ height: '100%' }} />}
-              containerElement={<div style={{ height: '100%' }} />}
-              mapElement={<div style={{ height: '500px' }} />}
+              loadingElement={
+                <div
+                  style={{
+                    height: '100%'
+                  }}
+                />
+              }
+              containerElement={
+                <div
+                  style={{
+                    height: '100%'
+                  }}
+                />
+              }
+              mapElement={
+                <div
+                  style={{
+                    height: '580px'
+                  }}
+                />
+              }
             />
           </Grid>
-        </Grid>
-        { this.state.selectedMarker &&
-          <Paper className={classes.paperData}>
-            <Grid container>
-                <Grid item xs={4}>
-                  <img src={`http://localhost:3000/resources/${this.props.app.loadedFlight.name}/${this.state.selectedMarker.image}`} />
+          <Grid item xs={3}>
+            {selectedMarker && (
+              <Paper className={classes.paperData}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <img
+                      src={`http://localhost:3000/resources/${loadedFlight.name}/${
+                        selectedMarker.image
+                      }`}
+                      alt="Aerial"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <span>Latitutde: {selectedMarker.lat}</span>
+                    <br />
+                    <span>Longitude; {selectedMarker.lng}</span>
+                    <br />
+                    <span>Trash Detected: "PLACEHOLDER"</span>
+                    <br />
+                    <Button raised color="primary">
+                      Override as not Trash
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={8}/>
-            </Grid>
-          </Paper>
-        }
+              </Paper>
+            )}
+          </Grid>
+        </Grid>
       </div>
     );
   }
@@ -124,9 +172,7 @@ class ViewFlightpage extends Component<Props> {
 
 // Connect to state
 function mapStateToProps(state) {
-  return {
-    app: state.app
-  };
+  return { app: state.app };
 }
 
 // Connect to actions

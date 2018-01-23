@@ -1,4 +1,4 @@
-import { LOAD_FLIGHT, UNLOAD_FLIGHT } from '../actions/app';
+import { LOAD_FLIGHT, UNLOAD_FLIGHT, SET_DEVICE_LOCATION } from '../actions/app';
 
 const initialState = {
   loadedFlight: {}
@@ -10,6 +10,8 @@ export default (state = initialState, action) => {
       return { ...state, loadedFlight: action.flight };
     case UNLOAD_FLIGHT:
       return { ...state, loadedFlight: {} };
+    case SET_DEVICE_LOCATION:
+      return { ...state, deviceLocation: action.deviceLocation };
     default:
       return state;
   }
