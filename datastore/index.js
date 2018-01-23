@@ -48,37 +48,44 @@ Database.createDatabase(() => {
     {
       lat: 39.393674,
       lng: -84.449653,
-      image: '1.jpg'
+      image: '1.jpg',
+      trashDetected: false
     },
     {
       lat: 39.392126,
       lng: -84.446967,
-      image: '2.jpg'
+      image: '2.jpg',
+      trashDetected: true
     },
     {
       lat: 39.39439,
       lng: -84.447439,
-      image: '1.jpg'
+      image: '1.jpg',
+      trashDetected: false
     },
     {
       lat: 39.393246,
       lng: -84.442461,
-      image: '2.jpg'
+      image: '2.jpg',
+      trashDetected: true
     },
     {
       lat: 39.392591,
       lng: -84.447418,
-      image: '1.jpg'
+      image: '1.jpg',
+      trashDetected: true
     },
     {
       lat: 39.393674,
       lng: -84.449653,
-      image: '2.jpg'
+      image: '2.jpg',
+      trashDetected: false
     },
     {
       lat: 39.392126,
       lng: -84.446967,
-      image: '1.jpg'
+      image: '1.jpg',
+      trashDetected: true
     }
   ]);
 

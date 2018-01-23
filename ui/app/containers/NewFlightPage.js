@@ -4,13 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Grid, Paper, Typography, TextField, withStyles, Button } from 'material-ui';
-import MapComponent from '../components/MapComponent';
-
-import getDeviceLocation from '../utils/geolocation';
+import { Paper, Typography, TextField, withStyles, Button } from 'material-ui';
+import DynamicMap from '../components/DynamicMap';
 
 import * as FlightsActions from '../actions/flights';
-import * as AppActions from '../actions/app';
 
 type Props = {
   classes: {},
@@ -20,8 +17,7 @@ type Props = {
   newFlight: (flightParams: FlightsActions.FlightParams) => void,
   history: {
     push: (path: string) => void
-  },
-  setDeviceLocation: (deviceLocation: {}) => void
+  }
 };
 
 const styles = theme => ({
@@ -36,6 +32,9 @@ const styles = theme => ({
   },
   button: {
     margin: 8
+  },
+  form: {
+    paddingBottom: 16
   }
 });
 
@@ -52,12 +51,6 @@ class NewFlightPage extends Component<Props> {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentWillMount() {
-    getDeviceLocation()
-      .then(loc => this.props.setDeviceLocation(loc))
-      .catch(console.log);
   }
 
   handleChange(key, value) {
@@ -78,68 +71,40 @@ class NewFlightPage extends Component<Props> {
 
     return (
       <div className={classes.root}>
-        <Grid container>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Typography type="headline">Create A New Flight</Typography>
-              <form>
-                <TextField
-                  label="Flight Name"
-                  margin="normal"
-                  fullWidth
-                  onChange={event => this.handleChange('name', event.target.value)}
-                />
-                <TextField
-                  label="Image Density (Pictures per Row)"
-                  margin="normal"
-                  fullWidth
-                  type="number"
-                  onChange={event => this.handleChange('imageDensity', event.target.value)}
-                />
-              </form>
-              <Button raised color="primary" className={classes.button} component={Link} to="/">
-                Back
-              </Button>
-              <Button raised color="primary" className={classes.button} onClick={this.handleSubmit}>
-                Submit
-              </Button>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <MapComponent
-              center={
-                deviceLocation || {
-                  lat: 0,
-                  lng: 0
-                }
-              }
-              zoom={15}
-              markers={[]}
-              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
-              loadingElement={
-                <div
-                  style={{
-                    height: '100%'
-                  }}
-                />
-              }
-              containerElement={
-                <div
-                  style={{
-                    height: '100%'
-                  }}
-                />
-              }
-              mapElement={
-                <div
-                  style={{
-                    height: '580px'
-                  }}
-                />
-              }
+        <Paper className={classes.paper}>
+          <Typography type="headline">Create A New Flight</Typography>
+          <form className={classes.form}>
+            <TextField
+              label="Flight Name"
+              margin="normal"
+              fullWidth
+              onChange={event => this.handleChange('name', event.target.value)}
             />
-          </Grid>
-        </Grid>
+            <TextField
+              label="Image Density (Pictures per Row)"
+              margin="normal"
+              fullWidth
+              type="number"
+              onChange={event => this.handleChange('imageDensity', event.target.value)}
+            />
+          </form>
+          <Typography type="headline">Pick the 2 opposite corners of your desired search area: </Typography>
+          <DynamicMap
+            center={deviceLocation || { lat: 0, lng: 0 }}
+            zoom={15}
+            markers={[]}
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: '100%' }} />}
+            containerElement={<div style={{ height: '100%' }} />}
+            mapElement={<div style={{ height: '500px' }} />}
+          />
+          <Button raised color="primary" className={classes.button} component={Link} to="/">
+            Back
+          </Button>
+          <Button raised color="primary" className={classes.button} onClick={this.handleSubmit}>
+            Submit
+          </Button>
+        </Paper>
       </div>
     );
   }
@@ -152,7 +117,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ FlightsActions, AppActions }, dispatch);
+  return bindActionCreators(FlightsActions, dispatch);
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(NewFlightPage));

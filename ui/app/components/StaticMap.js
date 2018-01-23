@@ -9,7 +9,7 @@ type Props = {
 };
 
 // Component logic and rendering
-class MapComponent extends Component<Props> {
+class StaticMap extends Component<Props> {
   props: Props;
 
   render() {
@@ -30,4 +30,4 @@ class MapComponent extends Component<Props> {
 }
 
 // Export
-export default withScriptjs(withGoogleMap(MapComponent));
+export default withScriptjs(withGoogleMap(StaticMap));

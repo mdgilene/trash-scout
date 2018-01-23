@@ -2,13 +2,18 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import { withStyles, AppBar, Toolbar, Typography, Reboot, Button } from 'material-ui';
+import getDeviceLocation from '../utils/geolocation';
+
+import * as AppActions from '../actions/app';
 
 type Props = {
   children: React.Node,
   app: {},
   router: {},
-  classes: {}
+  classes: {},
+  setDeviceLocation: (loc: {}) => void
 };
 
 const styles = () => ({
@@ -22,6 +27,12 @@ const styles = () => ({
 
 class App extends React.Component<Props> {
   props: Props;
+
+  componentWillMount() {
+    getDeviceLocation()
+      .then(loc => this.props.setDeviceLocation(loc))
+      .catch(console.log);
+  }
 
   render() {
     const { app, router, classes } = this.props;
@@ -55,4 +66,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(App));
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(AppActions, dispatch);
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(App));

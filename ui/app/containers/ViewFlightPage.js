@@ -2,16 +2,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withStyles, Grid, List, ListItem, Typography, Paper, Button } from 'material-ui';
+import { withStyles, Grid, List, ListItem, Typography, Paper, Button, } from 'material-ui';
+import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table';
 
-import MapComponent from '../components/MapComponent';
+import StaticMap from '../components/StaticMap';
 
-import getDeviceLocation from '../utils/geolocation';
 import * as AppActions from '../actions/app';
 
 type Props = {
   app: {
-    loadedFlight: {}
+    loadedFlight: {},
+    deviceLocation: {}
   },
   classes: {},
   match: {
@@ -19,8 +20,7 @@ type Props = {
       name: string
     }
   },
-  loadFlight: (name: string) => void,
-  setDeviceLocation: (deviceLocation: {}) => void
+  loadFlight: (name: string) => void
 };
 
 const styles = theme => ({
@@ -48,6 +48,14 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     height: 580,
     overflow: 'auto'
+  },
+  img: {
+    width: '100%'
+  },
+  centerContent: {
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
@@ -59,12 +67,6 @@ class ViewFlightpage extends Component<Props> {
     this.state = {};
 
     this.selectMarker = this.selectMarker.bind(this);
-  }
-
-  componentWillMount() {
-    getDeviceLocation()
-      .then(loc => this.props.setDeviceLocation(loc))
-      .catch(console.log);
   }
 
   componentDidMount() {
@@ -84,7 +86,8 @@ class ViewFlightpage extends Component<Props> {
       <div className={classes.root}>
         <Grid container>
           <Grid item xs={3}>
-            {loadedFlight.markers && loadedFlight.markers.length > 0 ? (
+            {loadedFlight.markers && loadedFlight.markers.length > 0 ?
+              // Display list of markers
               <Paper className={classes.paperList}>
                 <List>
                   {loadedFlight.markers.map((marker, index) => (
@@ -97,44 +100,22 @@ class ViewFlightpage extends Component<Props> {
                   ))}
                 </List>
               </Paper>
-            ) : (
+              :
+              // Display no markers
               <Paper className={classes.paperText}>
                 <Typography className={classes.markersText}>No Markers</Typography>
               </Paper>
-            )}
+            }
           </Grid>
           <Grid item xs={6}>
-            <MapComponent
-              center={
-                deviceLocation || {
-                  lat: 0,
-                  lng: 0
-                }
-              }
+            <StaticMap
+              center={deviceLocation || { lat: 0, lng: 0 }}
               zoom={15}
               markers={loadedFlight.markers || []}
               googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
-              loadingElement={
-                <div
-                  style={{
-                    height: '100%'
-                  }}
-                />
-              }
-              containerElement={
-                <div
-                  style={{
-                    height: '100%'
-                  }}
-                />
-              }
-              mapElement={
-                <div
-                  style={{
-                    height: '580px'
-                  }}
-                />
-              }
+              loadingElement={<div style={{ height: '100%' }} />}
+              containerElement={<div style={{ height: '100%' }} />}
+              mapElement={<div style={{ height: '580px' }} />}
             />
           </Grid>
           <Grid item xs={3}>
@@ -143,22 +124,39 @@ class ViewFlightpage extends Component<Props> {
                 <Grid container>
                   <Grid item xs={12}>
                     <img
-                      src={`http://localhost:3000/resources/${loadedFlight.name}/${
-                        selectedMarker.image
-                      }`}
+                      src={`http://localhost:3000/resources/${loadedFlight.name}/${selectedMarker.image}`}
                       alt="Aerial"
+                      className={classes.img}
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <span>Latitutde: {selectedMarker.lat}</span>
-                    <br />
-                    <span>Longitude; {selectedMarker.lng}</span>
-                    <br />
-                    <span>Trash Detected: "PLACEHOLDER"</span>
-                    <br />
-                    <Button raised color="primary">
-                      Override as not Trash
-                    </Button>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>Latitude</TableCell>
+                          <TableCell>{selectedMarker.lat}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Longitude</TableCell>
+                          <TableCell>{selectedMarker.lng}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Trash Detected</TableCell>
+                          <TableCell>{selectedMarker.trashDetected.toString()}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid item xs={12} className={classes.centerContent}>
+                    {!selectedMarker.trashDetected ?
+                      <Button raised color="primary">
+                        Override as Trash
+                      </Button>
+                      :
+                      <Button raised color="primary">
+                        Override as not Trash
+                      </Button>
+                    }
                   </Grid>
                 </Grid>
               </Paper>
