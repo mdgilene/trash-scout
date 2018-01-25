@@ -88,7 +88,7 @@ class NewFlightPage extends Component<Props> {
               onChange={event => this.handleChange('imageDensity', event.target.value)}
             />
           </form>
-          <Typography type="headline">Pick the 2 opposite corners of your desired search area: </Typography>
+          <Typography type="headline">Pick the 4 corners of your desired search area: </Typography>
           <DynamicMap
             center={deviceLocation || { lat: 0, lng: 0 }}
             zoom={15}

@@ -142,7 +142,7 @@ class ViewFlightpage extends Component<Props> {
                         </TableRow>
                         <TableRow>
                           <TableCell>Trash Detected</TableCell>
-                          <TableCell>{selectedMarker.trashDetected.toString()}</TableCell>
+                          <TableCell>{selectedMarker.trashDetected ? 'Yes' : 'No'}</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>

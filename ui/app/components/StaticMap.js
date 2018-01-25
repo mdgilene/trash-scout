@@ -16,7 +16,7 @@ class StaticMap extends Component<Props> {
     const { markers, center, zoom } = this.props;
 
     return (
-      <GoogleMap defaultZoom={zoom || 4} center={center}>
+      <GoogleMap defaultZoom={zoom || 4} center={center} defaultMapTypeId="satellite">
         {markers.map((marker, index) => (
           <Marker
             position={{ lat: marker.lat, lng: marker.lng }}
