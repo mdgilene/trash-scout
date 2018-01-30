@@ -59,22 +59,14 @@ function updateFlight(flight) {
   log('Flight', flight.$loki, 'updated');
 }
 
-function addMarkers(name, markers) {
+function addMarker(name, marker) {
   const flights = db.getCollection('flights');
   const flight = flights.by('name', name);
 
-  let added = 0;
-  markers.forEach(marker => {
-    // No duplicate markers, if you want to update a marker then use a different API call
-    if (!flight.markers.includes(marker)) {
-      flight.markers.push(marker);
-      added = added + 1;
-    }
-  });
-
+  if (!flight.markers.includes(marker)) {
+    flight.markers.push(marker);
+  }
   flights.update(flight);
-
-  log(added, 'markers added to flight', name);
 }
 
 function clear() {
@@ -94,6 +86,6 @@ module.exports = {
   getFlights,
   getFlight,
   updateFlight,
-  addMarkers,
+  addMarker,
   clear,
 };
