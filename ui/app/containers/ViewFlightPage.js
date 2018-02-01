@@ -93,8 +93,7 @@ class ViewFlightpage extends Component<Props> {
                   {loadedFlight.markers.map((marker, index) => (
                     <ListItem button key={index} onClick={() => this.selectMarker(marker)}>
                       <Typography>
-                        (lat: {marker.lat}
-                        , lng: {marker.lng}
+                        Marker: {index}
                       </Typography>
                     </ListItem>
                   ))}
@@ -124,7 +123,8 @@ class ViewFlightpage extends Component<Props> {
                 <Grid container>
                   <Grid item xs={12}>
                     <img
-                      src={`http://localhost:3000/resources/${loadedFlight.name}/${selectedMarker.image}`}
+                      // src={`http://localhost:3000/resources/${loadedFlight.name}/${selectedMarker.image}`}
+                      src={selectedMarker.image}
                       alt="Aerial"
                       className={classes.img}
                     />
@@ -134,11 +134,11 @@ class ViewFlightpage extends Component<Props> {
                       <TableBody>
                         <TableRow>
                           <TableCell>Latitude</TableCell>
-                          <TableCell>{selectedMarker.lat}</TableCell>
+                          <TableCell>{selectedMarker.lat.toFixed(6)}&deg;</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell>Longitude</TableCell>
-                          <TableCell>{selectedMarker.lng}</TableCell>
+                          <TableCell>{selectedMarker.lng.toFixed(6)}&deg;</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell>Trash Detected</TableCell>
