@@ -1,25 +1,25 @@
-const Database = require('./database');
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const multer = require('multer');
-const fs = require('fs');
+const Database = require("./database");
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const multer = require("multer");
+const fs = require("fs");
 
 const app = express();
 
-app.use(morgan('tiny'));
+app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
 // Serve static image files
-app.use('/resources', express.static('resources'));
+app.use("/resources", express.static("resources"));
 
 // Get individual flight
-app.get('/flights/:name/', (req, res) => {
+app.get("/flights/:name/", (req, res) => {
   res.json(Database.getFlight(req.params.name));
 });
 
 // Get all flights
-app.get('/flights', (req, res) => {
+app.get("/flights", (req, res) => {
   res.json(Database.getFlights());
 });
 
@@ -31,7 +31,7 @@ app.get('/flights', (req, res) => {
   imageDensity: number
 }
 */
-app.post('/flights', (req, res) => {
+app.post("/flights", (req, res) => {
   Database.newFlight(req.body);
   res.status(200).send();
 });
@@ -39,11 +39,10 @@ app.post('/flights', (req, res) => {
 // Update flight
 // Format application/json
 // Must be a modified database entry, including all database metadata
-app.put('/flights', (req, res) => {
+app.put("/flights", (req, res) => {
   Database.updateFlight(req.body);
   res.status(200).send();
 });
-
 
 // Setup image storage middleware
 const storage = multer.diskStorage({
@@ -68,39 +67,41 @@ const upload = multer({ storage });
 // -- image:          image file name
 // -- trashDetected:  true/false
 // -- imageData:      binary image data, source name must be the same as the image field above.
-app.post('/flights/:name', upload.single('imageData'), (req, res) => {
+app.post("/flights/:name", upload.any(), (req, res) => {
   Database.addMarker(req.params.name, {
     lat: +req.body.lat,
     lng: +req.body.lng,
     image: req.body.image,
-    trashDetected: req.body.trashDetected == 'true'
+    trashDetected: req.body.trashDetected === "true"
   });
   res.status(200).send();
 });
 
 // TODO: Remove this.
 // Delete all flights
-app.delete('/flights', (req, res) => {
+app.delete("/flights", (req, res) => {
   Database.clear();
   res.status(200).send();
 });
 
 // Initilize database and start server.
 Database.createDatabase(() => {
-  console.log('Initilize http server now...');
+  console.log("Initilize http server now...");
 
   Database.clear();
-  Database.newFlight({ name: 'Test-Flight' });
+  Database.newFlight({ name: "Test-Flight" });
   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(() => {
-    Database.addMarker('Test-Flight', {
+    Database.addMarker("Test-Flight", {
       lat: Math.random() * 180 - 90,
       lng: Math.random() * 360 - 180,
-      image: `https://picsum.photos/500/?image=${Math.floor(Math.random() * 100)}`,
+      image: `https://picsum.photos/500/?image=${Math.floor(
+        Math.random() * 100
+      )}`,
       trashDetected: false
     });
-  })
+  });
 
   app.listen(3000, () =>
-    console.log('Server listening for HTTP requests on port 3000'),
+    console.log("Server listening for HTTP requests on port 3000")
   );
 });
