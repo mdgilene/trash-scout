@@ -32,8 +32,12 @@ app.get("/flights", (req, res) => {
 }
 */
 app.post("/flights", (req, res) => {
-  Database.newFlight(req.body);
-  res.status(200).send();
+  if (Database.newFlight(req.body))
+    return res.status(200).json({ success: true });
+
+  return res
+    .status(400)
+    .json({ message: "Flight with that name already exists" });
 });
 
 // Update flight
@@ -41,7 +45,7 @@ app.post("/flights", (req, res) => {
 // Must be a modified database entry, including all database metadata
 app.put("/flights", (req, res) => {
   Database.updateFlight(req.body);
-  res.status(200).send();
+  res.status(200).json();
 });
 
 // Setup image storage middleware
@@ -68,39 +72,21 @@ const upload = multer({ storage });
 // -- trashDetected:  true/false
 // -- imageData:      binary image data, source name must be the same as the image field above.
 app.post("/flights/:name", upload.any(), (req, res) => {
-  Database.addMarker(req.params.name, {
-    lat: +req.body.lat,
-    lng: +req.body.lng,
-    image: req.body.image,
-    trashDetected: req.body.trashDetected === "true"
-  });
-  res.status(200).send();
-});
+  if (
+    Database.addMarker(req.params.name, {
+      lat: +req.body.lat,
+      lng: +req.body.lng,
+      image: req.body.image,
+      trashDetected: req.body.trashDetected === "true"
+    })
+  )
+    return res.status(200).json({ success: true });
 
-// TODO: Remove this.
-// Delete all flights
-app.delete("/flights", (req, res) => {
-  Database.clear();
-  res.status(200).send();
+  return res.status(500).json({ message: "Unable to add marker" });
 });
 
 // Initilize database and start server.
 Database.createDatabase(() => {
-  console.log("Initilize http server now...");
-
-  Database.clear();
-  Database.newFlight({ name: "Test-Flight" });
-  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(() => {
-    Database.addMarker("Test-Flight", {
-      lat: Math.random() * 180 - 90,
-      lng: Math.random() * 360 - 180,
-      image: `https://picsum.photos/500/?image=${Math.floor(
-        Math.random() * 100
-      )}`,
-      trashDetected: false
-    });
-  });
-
   app.listen(3000, () =>
     console.log("Server listening for HTTP requests on port 3000")
   );
