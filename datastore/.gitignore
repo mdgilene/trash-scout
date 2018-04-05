@@ -1,4 +1,4 @@
 node_modules
-trash-scout.json
+*.db
 resources/
 testImage.jpeg
