@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withStyles, Grid, List, ListItem, Typography, Paper, Button, } from 'material-ui';
+import { withStyles, Grid, List, ListItem, Typography, Paper, Button } from 'material-ui';
 import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table';
 
 import StaticMap from '../components/StaticMap';
@@ -62,9 +62,11 @@ const styles = theme => ({
 class ViewFlightpage extends Component<Props> {
   props: Props;
 
-  constructor() {
+  constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      currentCenter: props.app.deviceLocation || { lat: 0, lng: 0 }
+    };
 
     this.selectMarker = this.selectMarker.bind(this);
   }
@@ -74,41 +76,39 @@ class ViewFlightpage extends Component<Props> {
   }
 
   selectMarker(marker) {
-    this.setState({ selectedMarker: marker });
+    this.setState({ selectedMarker: marker, currentCenter: { lat: marker.lat, lng: marker.lng } });
   }
 
   render() {
     const { classes } = this.props;
-    const { loadedFlight, deviceLocation } = this.props.app;
-    const { selectedMarker } = this.state;
+    const { loadedFlight } = this.props.app;
+    const { selectedMarker, currentCenter } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container>
           <Grid item xs={3}>
-            {loadedFlight.markers && loadedFlight.markers.length > 0 ?
+            {loadedFlight.markers && loadedFlight.markers.length > 0 ? (
               // Display list of markers
               <Paper className={classes.paperList}>
                 <List>
                   {loadedFlight.markers.map((marker, index) => (
                     <ListItem button key={index} onClick={() => this.selectMarker(marker)}>
-                      <Typography>
-                        Marker: {index}
-                      </Typography>
+                      <Typography>Marker: {index}</Typography>
                     </ListItem>
                   ))}
                 </List>
               </Paper>
-              :
+            ) : (
               // Display no markers
               <Paper className={classes.paperText}>
                 <Typography className={classes.markersText}>No Markers</Typography>
               </Paper>
-            }
+            )}
           </Grid>
           <Grid item xs={6}>
             <StaticMap
-              center={deviceLocation || { lat: 0, lng: 0 }}
+              center={currentCenter}
               zoom={15}
               markers={loadedFlight.markers || []}
               googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQPbpLgidGrX_Z7iuB3D5EDbCbCQjkH8&v=3.exp&libraries=geometry,drawing,places"
@@ -123,8 +123,9 @@ class ViewFlightpage extends Component<Props> {
                 <Grid container>
                   <Grid item xs={12}>
                     <img
-                      // src={`http://localhost:3000/resources/${loadedFlight.name}/${selectedMarker.image}`}
-                      src={selectedMarker.image}
+                      src={`http://localhost:3000/resources/${loadedFlight.name}/${
+                        selectedMarker.image
+                      }`}
                       alt="Aerial"
                       className={classes.img}
                     />
@@ -148,15 +149,15 @@ class ViewFlightpage extends Component<Props> {
                     </Table>
                   </Grid>
                   <Grid item xs={12} className={classes.centerContent}>
-                    {!selectedMarker.trashDetected ?
+                    {!selectedMarker.trashDetected ? (
                       <Button raised color="primary">
                         Override as Trash
                       </Button>
-                      :
+                    ) : (
                       <Button raised color="primary">
                         Override as not Trash
                       </Button>
-                    }
+                    )}
                   </Grid>
                 </Grid>
               </Paper>
